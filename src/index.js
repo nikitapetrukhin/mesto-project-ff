@@ -6,10 +6,10 @@ import { openPopup, closePopup } from './components/modal.js';
 const cardsContainer = document.querySelector('.places__list');
 const popups = document.querySelectorAll('.popup');
 
-const profileEditButton = document.querySelector('.profile__edit-button'); // Edit button for edit profile popup 
+const profileEditButton = document.querySelector('.profile__edit-button'); 
 const profileEditPopup = document.querySelector('.popup_type_edit');
 
-const newCardAddButton = document.querySelector('.profile__add-button'); // Add Button
+const newCardAddButton = document.querySelector('.profile__add-button');
 const newCardAddPopup = document.querySelector('.popup_type_new-card');
 
 const popupImg = document.querySelector('.popup_type_image');
@@ -51,7 +51,7 @@ function handleAddCardForm (evt) {
   };
   const card = renderCard(manualCardData);
   evt.target.reset();
-  closePopup (evt.target.closest('.popup'));
+  closePopup (newCardAddPopup);
   return card;
 }
 
@@ -67,7 +67,7 @@ function handleProfileEditFormSubmit (evt) {
   nameProfile.textContent = profileEditFormNameInput.value;
   jobProfile.textContent = profileEditFormJobInput.value;
   evt.target.reset();
-  closePopup(evt.target.closest('.popup'));
+  closePopup(profileEditPopup);
 };
 
 profileEditButton.addEventListener('click', () => {
