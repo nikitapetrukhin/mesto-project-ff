@@ -1,5 +1,5 @@
 import './pages/index.css';
-import { createCard, displayDeleteCard, displayLikeCard } from './components/card.js';
+import { createCard, displayDeleteCard, displayLikeCard, updateCardLikes } from './components/card.js';
 import { openPopup, closePopup } from './components/modal.js';
 import { enableValidation, clearValidation } from './components/validation.js';
 import { 
@@ -81,7 +81,7 @@ const handleAddCardForm = (evt) => {
     .then((result) => {
       const card = renderCard({ ...result, ownerId: userId });
       evt.target.reset();
-      clearValidation(addCardForm, validationConfig);
+      //clearValidation(addCardForm, validationConfig);
       closePopup(newCardAddPopup);
       return card;
     })
@@ -114,7 +114,7 @@ const handleProfileFormSubmit = (evt) => {
       profileJob.textContent = result.about;
       evt.target.reset();
       closePopup(profilePopup);
-      clearValidation(profileForm, validationConfig);
+      //clearValidation(profileForm, validationConfig);
     })
     .catch((err) => {
       console.log(err);
@@ -136,7 +136,7 @@ const handleEditAvatarForm = (evt) => {
     .then((result) => {
       profileImg.style.backgroundImage = 'url(' + result.avatar + ')';
       evt.target.reset();
-      clearValidation(editAvatarForm, validationConfig);
+      //clearValidation(editAvatarForm, validationConfig);
       closePopup(editAvatarPopup);
     })
     .catch((err) => {
@@ -175,11 +175,6 @@ const likeCard = (cardId, cardElement) => {
       console.log(err);
     });
   }
-};
-
-const updateCardLikes = (cardElement, likes) => {
-  const cardLikes = cardElement.querySelector('.card__like-counter');
-  cardLikes.textContent = likes;
 };
 
 profileButton.addEventListener('click', () => {
@@ -244,6 +239,7 @@ confirmationForm.addEventListener('submit', (evt) => {
           displayDeleteCard(cardElementForDelete);
           idCardForDelete = null;
           cardElementForDelete = null;
+          closePopup(confirmationPopup);
         } else {
           console.log(result.message);
         }
@@ -251,6 +247,5 @@ confirmationForm.addEventListener('submit', (evt) => {
       .catch((err) => {
         console.log(err);
       });
-    closePopup(confirmationPopup);
   }
 });
