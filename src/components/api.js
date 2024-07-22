@@ -91,14 +91,6 @@ export const addCard = (name, link) => {
     .catch(err => console.log(err));
 };
 
-// У меня есть общий сервер, на который я и другие пользователи могут добавлять карточки. 
-// Нужно реализовать такой функционал добавления карточки, чтобы кнопка удаления корточки была 
-// только у тех карточек, которые добавил я сам и чтобы я не мог удалить карточки других пользователей.
-
-// Я рассуждаю так: я не получаю от сервера никаких html файлов - соответственно мне нужно удалять кнопку 
-// удаления корточки из разметки при условии, что мой id не совпадает с id автора картотчки. И рендерить
-// кнопку удаления - если совпадает.
-
 export const fetchDeleteCard = (cardId) => {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: 'DELETE',
@@ -109,23 +101,6 @@ export const fetchDeleteCard = (cardId) => {
     .then(handleResponse)
     .catch(handleError);
 };
-
-// export const deleteMyCard = (cardId) => {
-//   return fetch(`${config.baseUrl}/cards/${cardId}`, {
-//     method: 'DELETE',
-//     headers: {
-//       authorization: config.headers.authorization
-//     }
-//   })
-//     .then(res => {
-//       if (res.ok) {
-//         return res.json();
-//         //console.log(res.json());
-//       }
-//       return Promise.reject(`Ошибка: ${res.status}`);
-//     })
-//     .catch(err => console.log(err));
-// };
 
 export const putLike = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {

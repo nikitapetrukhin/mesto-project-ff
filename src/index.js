@@ -1,4 +1,3 @@
-//import { initialCards } from './scripts/cards.js';
 import './pages/index.css';
 import { createCard, displayDeleteCard, displayLikeCard } from './components/card.js';
 import { openPopup, closePopup } from './components/modal.js';
@@ -11,8 +10,7 @@ import {
   fetchDeleteCard,
   putLike,
   deleteLike,
-  patchAvatar,
-  checkImgUrl
+  patchAvatar
 } from './components/api.js';
 
 const cardsContainer = document.querySelector('.places__list');
@@ -60,10 +58,6 @@ let idCardForDelete = null;
 let cardElementForDelete = null;
 let userId = null;
 
-// initialCards.forEach(cardData => {
-//   renderCard(cardData);
-// })
-
 const renderCard = (item, method = "prepend") => {
   const cardDataConfig = {
     onOpenPopupData: openPopupData,
@@ -77,34 +71,6 @@ const renderCard = (item, method = "prepend") => {
   cardsContainer[method](card);
 }
 
-// function handleAddCardForm (evt) {
-//   evt.preventDefault();
-//   const manualCardData = {
-//     name: addCardFormNameInput.value,
-//     link: addCardFormLinkInput.value
-//   };
-//   const card = renderCard(manualCardData);
-//   evt.target.reset();
-//   clearValidation(addCardForm, validationConfig);
-//   closePopup (newCardAddPopup);
-//   return card;
-// }
-
-// function handleAddCardForm (evt) {
-//   evt.preventDefault();
-//   addCard(addCardFormNameInput.value, addCardFormLinkInput.value)
-//     .then((result) => {
-//       const card = renderCard(result);
-//       return card;
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-//   evt.target.reset();
-//   clearValidation(addCardForm, validationConfig);
-//   closePopup (newCardAddPopup);
-// }
-
 const handleAddCardForm = (evt) => {
   evt.preventDefault();
   const addCardSubmitButton = evt.submitter;
@@ -114,7 +80,6 @@ const handleAddCardForm = (evt) => {
   addCard(addCardFormNameInput.value, addCardFormLinkInput.value)
     .then((result) => {
       const card = renderCard({ ...result, ownerId: userId });
-      //renderCard({ ...result, ownerId: userId });
       evt.target.reset();
       clearValidation(addCardForm, validationConfig);
       closePopup(newCardAddPopup);
@@ -130,40 +95,12 @@ const handleAddCardForm = (evt) => {
     });
 }
 
-// function handleAddCardForm (evt) {
-//   evt.preventDefault();
-//   addCard(addCardFormNameInput.value, addCardFormLinkInput.value)
-//     .then((result) => {
-//       console.log(result);
-//       const manualCardData = {
-//         name: result.name,
-//         link: result.link
-//       };
-//       const card = renderCard(manualCardData);
-//       return card;
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-//   evt.target.reset();
-//   clearValidation(addCardForm, validationConfig);
-//   closePopup (newCardAddPopup);
-// }
-
 const openPopupData = (link, name) => {
   popupImgImage.src = link;
   popupImgImage.alt = name;
   popupImgCaption.textContent = name;
   openPopup(popupImg);
 };
-
-// function handleProfileFormSubmit (evt) {
-//   evt.preventDefault();
-//   profileName.textContent = profileFormNameInput.value;
-//   profileJob.textContent = profileFormJobInput.value;
-//   evt.target.reset();
-//   closePopup(profilePopup);
-// };
 
 const handleProfileFormSubmit = (evt) => {
   evt.preventDefault();
@@ -173,7 +110,6 @@ const handleProfileFormSubmit = (evt) => {
   profileFormButton.textContent = 'Сохранение...';
   editUserInfo(profileFormNameInput.value, profileFormJobInput.value)
     .then((result) => {
-      //console.log(result);
       profileName.textContent = result.name;
       profileJob.textContent = result.about;
       evt.target.reset();
@@ -212,24 +148,6 @@ const handleEditAvatarForm = (evt) => {
       editAvatarSubmitButton.style.cursor = 'pointer';
     })
 }
-
-
-// const handleEditAvatarForm = (evt) => {
-//   evt.preventDefault();
-//   patchAvatar(editAvatarFormLinkInput.value)
-//     .then((result) => {
-//       checkImgUrl(result.avatar)
-//         .then((result) => {
-//           console.log(result);
-//         })
-//         .catch((err) => {
-//           console.log(err);
-//         });
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// }
 
 const cardDelete = (cardId, cardElement) => {
   idCardForDelete = cardId;
@@ -317,28 +235,11 @@ Promise.all([getUserInfo(), getInitialCards()])
     console.log(err);
   });
 
-// const cardDelete = (idCardForDelete, cardElement) => {
-//   openPopup(confirmationPopup);
-//   confirmationForm.addEventListener('submit', (evt) => {
-//     evt.preventDefault();
-//     fetchDeleteCard(idCardForDelete)
-//       .then((result) => {
-//         console.log(result);
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//     closePopup(confirmationPopup);
-//     displayDeleteCard(cardElement);
-//   });
-// };
-
 confirmationForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   if (idCardForDelete && cardElementForDelete) {
     fetchDeleteCard(idCardForDelete)
       .then((result) => {
-        // console.log(result);
         if (result.message === 'Пост удалён') {
           displayDeleteCard(cardElementForDelete);
           idCardForDelete = null;
