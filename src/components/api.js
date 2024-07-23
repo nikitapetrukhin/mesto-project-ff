@@ -141,12 +141,14 @@ export const patchAvatar = (avatar) => {
 
 export const checkImgUrl = (url) => {
   return fetch(url, {
-    method: 'HEAD',
-    headers: {
-      authorization: config.headers.authorization,
-      'Content-Type': config.headers['Content-Type']
-    }
+    method: 'HEAD'
   })
-    .then(handleResponse)
-    .catch(handleError);
+    .then(res => {
+      if (res.ok && res.headers.get('content-type').startsWith('image/')) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .catch(err => console.log(err));
 }

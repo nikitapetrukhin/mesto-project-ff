@@ -10,7 +10,8 @@ import {
   fetchDeleteCard,
   putLike,
   deleteLike,
-  patchAvatar
+  patchAvatar,
+  checkImgUrl
 } from './components/api.js';
 
 const cardsContainer = document.querySelector('.places__list');
@@ -81,7 +82,6 @@ const handleAddCardForm = (evt) => {
     .then((result) => {
       const card = renderCard({ ...result, ownerId: userId });
       evt.target.reset();
-      //clearValidation(addCardForm, validationConfig);
       closePopup(newCardAddPopup);
       return card;
     })
@@ -114,7 +114,6 @@ const handleProfileFormSubmit = (evt) => {
       profileJob.textContent = result.about;
       evt.target.reset();
       closePopup(profilePopup);
-      //clearValidation(profileForm, validationConfig);
     })
     .catch((err) => {
       console.log(err);
@@ -132,15 +131,26 @@ const handleEditAvatarForm = (evt) => {
   editAvatarSubmitButton.disabled = true; 
   editAvatarSubmitButton.textContent = 'Сохранение...';
   editAvatarSubmitButton.style.cursor = 'not-allowed';
-  patchAvatar(editAvatarFormLinkInput.value)
-    .then((result) => {
-      profileImg.style.backgroundImage = 'url(' + result.avatar + ')';
-      evt.target.reset();
-      //clearValidation(editAvatarForm, validationConfig);
-      closePopup(editAvatarPopup);
+  const imgUrl = editAvatarFormLinkInput.value;
+  checkImgUrl(imgUrl)
+    .then((isValid) => {
+      if (isValid) {
+        patchAvatar(imgUrl)
+          .then((result) => {
+            profileImg.style.backgroundImage = 'url(' + result.avatar + ')';
+            evt.target.reset();
+            clearValidation(editAvatarForm, validationConfig);
+            closePopup(editAvatarPopup);
+          })
+          .catch((err) => {
+            console.log('Ошибка в получении картинки',err);
+          });
+      } else {
+        console.log('Полученный url не является изображением');
+      }
     })
     .catch((err) => {
-      console.log(err);
+      console.log('Ошибка в проверке юрла', err);
     })
     .finally(() => {
       editAvatarSubmitButton.disabled = false; 
